@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import LatticeAuth from 'lattice-auth';
-import { Colors } from 'lattice-ui-kit';
+import { Colors } from '../lattice-ui-kit/';
 import { normalize } from 'polished';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';

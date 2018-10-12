@@ -29,7 +29,6 @@
     "immutable": "4.0.0-rc.9",
     "lattice": "^0.43.0",
     "lattice-sagas": "^0.9.0",
-    "lattice-ui-kit": "^0.1.0",
     "lodash": "^4.17.10",
     "loglevel": "^1.6.1",
     "moment": "^2.22.0",
