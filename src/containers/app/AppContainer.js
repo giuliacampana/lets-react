@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
+import axios from 'axios';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -61,11 +62,43 @@ type Props = {
 };
 
 class AppContainer extends Component<Props> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      entities: []
+    };
+
+    this.getEntityTypes = this.getEntityTypes.bind(this);
+  }
 
   componentDidMount() {
 
     const { actions } = this.props;
     actions.loadApp(APP_NAME);
+
+    this.getEntityTypes();
+  }
+
+  getEntityTypes() {
+    axios.get('https://api.openlattice.com/datastore/edm/entity/type')
+      .then((response) => {
+        let ents = [];
+        for (let i = 0; i < response.data.length; i += 1) {
+          if (response.data[i].category === 'EntityType') {
+            ents.push(response.data[i]);
+          }
+        }
+        ents = ents.sort((a, b) => {
+          return a.type.name.toLowerCase().localeCompare(b.type.name.toLowerCase());
+        });
+        this.setState({
+          entities: ents
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   render() {
@@ -77,10 +110,10 @@ class AppContainer extends Component<Props> {
             <AppContentInnerWrapper>
               <Route
                   exact path="/"
-                  component={EntityList} />
+                  render={props => <EntityList {...props} entities={this.state.entities} />} />
               <Route
                   path="/entities/:entityId"
-                  component={EntityCard} />
+                  render={({ match }) => <EntityCard entity={this.state.entities.find(entObj => entObj.id === match.params.entityId)} />} />
             </AppContentInnerWrapper>
           </AppContentOuterWrapper>
         </AppContainerWrapper>
