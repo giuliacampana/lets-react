@@ -7,11 +7,11 @@ import { Colors } from '../../../lattice-ui-kit/build/lattice-ui-kit';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
-// import { localeData } from 'moment';
 
 import {
-  CardContainer, TitleContainer, ListTitle, TableOuterWrapper, TableInnerWrapper, InnerScrollContainer, TableRow, Subheader
+  CardContainer, TitleContainer, ListTitle, TableOuterWrapper, TableInnerWrapper, ScrollContainer, TableRow, ClickableTableRow, Subheader
 } from './Styles';
 
 const { logout } = AuthActionFactory;
@@ -22,16 +22,6 @@ type Props = {
     logout :() => void;
   };
 };
-
-const CardTableRow = styled(TableRow)`
-  justify-content: space-between;
-`;
-
-const ScrollContainer = styled(InnerScrollContainer)`
-  height: auto;
-  max-height: 4000px;
-`;
-
 
 const EntityCard = ({ entity, associations }) => (
   <CardContainer>
@@ -46,7 +36,7 @@ const EntityCard = ({ entity, associations }) => (
           </TitleContainer>
           {
             entity.properties.map(p => (
-              <CardTableRow>{p}</CardTableRow>
+              <TableRow>{p}</TableRow>
             ))
           }
           <TitleContainer>
@@ -54,7 +44,7 @@ const EntityCard = ({ entity, associations }) => (
           </TitleContainer>
           {
             associations[0].map(a => (
-              <CardTableRow>{a.entityType.type.name}</CardTableRow>
+              <ClickableTableRow>{a.entityType.type.name}</ClickableTableRow>
             ))
           }
           <TitleContainer>
@@ -62,7 +52,7 @@ const EntityCard = ({ entity, associations }) => (
           </TitleContainer>
           {
             associations[1].map(a => (
-              <CardTableRow>{a.entityType.type.name}</CardTableRow>
+              <ClickableTableRow>{a.entityType.type.name}</ClickableTableRow>
             ))
           }
         </ScrollContainer>

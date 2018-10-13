@@ -62,6 +62,11 @@ const InnerScrollContainer = styled.div`
   flex-direction: column;
 `;
 
+const ScrollContainer = styled(InnerScrollContainer)`
+  height: auto;
+  max-height: 4000px;
+`;
+
 const TableRow = styled.div`
   height: 50px;
   left: 0px;
@@ -73,6 +78,9 @@ const TableRow = styled.div`
   align-items: center;
   font-size: 16px;
   padding: 18px;
+`;
+
+const ClickableTableRow = styled(TableRow)`
   &:hover {
     cursor: pointer;
     background-color: rgb(237, 246, 255);
@@ -94,6 +102,8 @@ export {
   TableOuterWrapper,
   TableInnerWrapper,
   InnerScrollContainer,
+  ScrollContainer,
   TableRow,
+  ClickableTableRow,
   Subheader
 };

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import styled from 'styled-components';
-import axios from 'axios';
 import { Map } from 'immutable';
 import { AuthActionFactory } from 'lattice-auth';
 import { Colors } from '../../../lattice-ui-kit/build/lattice-ui-kit';
@@ -11,7 +9,7 @@ import { withRouter } from 'react-router';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
 import {
-  CardContainer, TitleContainer, ListTitle, TableOuterWrapper, TableInnerWrapper, InnerScrollContainer, TableRow
+  CardContainer, TitleContainer, ListTitle, TableOuterWrapper, TableInnerWrapper, InnerScrollContainer, TableRow, ClickableTableRow
 } from './Styles';
 
 
@@ -34,8 +32,8 @@ const EntityList = props => (
         <InnerScrollContainer>
           {
             props.entities.map(entity => (
-              <Link to={`entities/${entity.id}`} style={{ textDecoration: 'none' }}>
-                <TableRow key={entity.id}>{entity.type.name}</TableRow>
+              <Link to={`entities/${entity.id}`} style={{ textDecoration: 'none', color: '#8e929b' }}>
+                <ClickableTableRow key={entity.id}>{entity.type.name}</ClickableTableRow>
               </Link>
             ))
           }
