@@ -33,7 +33,7 @@ const ScrollContainer = styled(InnerScrollContainer)`
 `;
 
 
-const EntityCard = ({ entity }) => (
+const EntityCard = ({ entity, associations }) => (
   <CardContainer>
     <TitleContainer>
       <ListTitle>{entity.type.name}</ListTitle>
@@ -52,9 +52,19 @@ const EntityCard = ({ entity }) => (
           <TitleContainer>
             <Subheader>Upstream Associations</Subheader>
           </TitleContainer>
+          {
+            associations[0].map(a => (
+              <CardTableRow>{a.entityType.type.name}</CardTableRow>
+            ))
+          }
           <TitleContainer>
             <Subheader>Downstream Associations</Subheader>
           </TitleContainer>
+          {
+            associations[1].map(a => (
+              <CardTableRow>{a.entityType.type.name}</CardTableRow>
+            ))
+          }
         </ScrollContainer>
       </TableInnerWrapper>
     </TableOuterWrapper>

@@ -66,10 +66,15 @@ class AppContainer extends Component<Props> {
     super(props);
 
     this.state = {
-      entities: []
+      entities: [],
+      properties: {},
+      associations: []
     };
 
     this.getEntityTypes = this.getEntityTypes.bind(this);
+    this.getPropertyTypes = this.getPropertyTypes.bind(this);
+    this.getAssociationTypes = this.getAssociationTypes.bind(this);
+    this.findAssociations = this.findAssociations.bind(this);
   }
 
   componentDidMount() {
@@ -96,9 +101,68 @@ class AppContainer extends Component<Props> {
           entities: ents
         });
       })
+      .then(() => {
+        this.getPropertyTypes();
+      })
+      .then(() => {
+        this.getAssociationTypes();
+      })
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  getPropertyTypes() {
+    axios.get('https://api.openlattice.com/datastore/edm/property/type')
+      .then((response) => {
+        let props = {};
+        for (let i = 0; i < response.data.length; i++) {
+          props[response.data[i].id] = response.data[i];
+        }
+        this.setState({
+          properties: props
+        });
+      })
+      .then(() => {
+        for (let i = 0; i < this.state.entities.length; i++) {
+          const entity = this.state.entities[i];
+          for (let j = 0; j < entity.properties.length; j++) {
+            let propName = this.state.properties[entity.properties[j]].type.name;
+            
+            entity.properties.splice(j, 1, propName);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  getAssociationTypes() {
+    axios.get('https://api.openlattice.com/datastore/edm/association/type')
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          associations: response.data
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  findAssociations(entityId) {
+    console.log('this.state.associations inside func: ', this.state.associations);
+    let allAssociations = [[], []];
+    for (let i = 0; i < this.state.associations.length; i++) {
+      if (this.state.associations[i].src.includes(entityId)) {
+        allAssociations[0].push(this.state.associations[i]);
+      }
+      if (this.state.associations[i].dst.includes(entityId)) {
+        allAssociations[1].push(this.state.associations[i]);
+      }
+    }
+    return allAssociations;
   }
 
   render() {
@@ -113,7 +177,7 @@ class AppContainer extends Component<Props> {
                   render={props => <EntityList {...props} entities={this.state.entities} />} />
               <Route
                   path="/entities/:entityId"
-                  render={({ match }) => <EntityCard entity={this.state.entities.find(entObj => entObj.id === match.params.entityId)} />} />
+                  render={({ match }) => <EntityCard entity={this.state.entities.find(entObj => entObj.id === match.params.entityId)} associations={this.findAssociations(match.params.entityId)} />} />
             </AppContentInnerWrapper>
           </AppContentOuterWrapper>
         </AppContainerWrapper>
