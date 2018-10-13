@@ -9,9 +9,11 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import AppHeaderContainer from './AppHeaderContainer';
+import EntityList from '../cards/EntityList';
+import EntityCard from '../cards/EntityCard';
 import { loadApp } from './AppActions';
 import { APP_NAME } from '../../utils/Constants';
 import {
@@ -60,15 +62,6 @@ type Props = {
 
 class AppContainer extends Component<Props> {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      entities: {},
-      associations: {}
-    };
-  }
-
   componentDidMount() {
 
     const { actions } = this.props;
@@ -82,6 +75,12 @@ class AppContainer extends Component<Props> {
           <AppHeaderContainer />
           <AppContentOuterWrapper>
             <AppContentInnerWrapper>
+              <Route
+                  exact path="/"
+                  component={EntityList} />
+              <Route
+                  path="/entities/:entityId"
+                  component={EntityCard} />
             </AppContentInnerWrapper>
           </AppContentOuterWrapper>
         </AppContainerWrapper>
