@@ -8,11 +8,10 @@ import styled from 'styled-components';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import AppHeaderContainer from './AppHeaderContainer';
-import Spinner from '../../components/spinner/Spinner';
-import * as Routes from '../../core/router/Routes';
 import { loadApp } from './AppActions';
 import { APP_NAME } from '../../utils/Constants';
 import {
@@ -45,7 +44,8 @@ const AppContentInnerWrapper = styled.div`
   display: flex;
   flex: 1 0 auto;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
   max-width: ${APP_CONTAINER_MAX_WIDTH}px;
   padding: ${APP_CONTENT_PADDING}px;
   position: relative;
@@ -60,42 +60,32 @@ type Props = {
 
 class AppContainer extends Component<Props> {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      entities: {},
+      associations: {}
+    };
+  }
+
   componentDidMount() {
 
     const { actions } = this.props;
     actions.loadApp(APP_NAME);
   }
 
-  renderAppContent = () => {
-
-    const { isLoadingApp } = this.props;
-    if (isLoadingApp) {
-      return (
-        <Spinner />
-      );
-    }
-
-    return (
-      <Switch>
-        <Route exact strict path={Routes.HOME} />
-        <Route path="/tab1" render={() => null} />
-        <Route path="/tab2" render={() => null} />
-        <Redirect to={Routes.HOME} />
-      </Switch>
-    );
-  }
-
   render() {
-
     return (
-      <AppContainerWrapper>
-        <AppHeaderContainer />
-        <AppContentOuterWrapper>
-          <AppContentInnerWrapper>
-            { this.renderAppContent() }
-          </AppContentInnerWrapper>
-        </AppContentOuterWrapper>
-      </AppContainerWrapper>
+      <Router>
+        <AppContainerWrapper>
+          <AppHeaderContainer />
+          <AppContentOuterWrapper>
+            <AppContentInnerWrapper>
+            </AppContentInnerWrapper>
+          </AppContentOuterWrapper>
+        </AppContainerWrapper>
+      </Router>
     );
   }
 }
@@ -114,4 +104,6 @@ function mapDispatchToProps(dispatch :Function) :Object {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(AppContainer)
+);

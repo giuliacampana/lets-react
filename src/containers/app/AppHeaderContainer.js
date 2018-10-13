@@ -14,7 +14,7 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import AppNavigationContainer from './AppNavigationContainer';
-import OpenLatticeLogo from '../../assets/images/logo_v2.png';
+import OpenLatticeLogo from '../../assets/images/OpenLatticeLogo.png';
 import * as Routes from '../../core/router/Routes';
 import {
   APP_CONTAINER_MAX_WIDTH,
@@ -81,14 +81,17 @@ const AppLogoIcon = styled.img.attrs({
   src: OpenLatticeLogo,
 })`
   height: 26px;
+  width: 100px;
 `;
 
 const AppTitle = styled.h1`
   color: ${NEUTRALS[0]};
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 3px;
   line-height: normal;
   margin: 0 0 0 10px;
+  padding-left: 10px;
 `;
 
 const LogoutButton = styled(Button)`
@@ -111,10 +114,10 @@ class AppHeaderContainer extends Component<Props> {
       <LogoTitleWrapperLink to={Routes.ROOT}>
         <AppLogoIcon />
         <AppTitle>
-          OpenLattice React App
+          Entity Data Model
         </AppTitle>
       </LogoTitleWrapperLink>
-      <AppNavigationContainer />
+      {/* <AppNavigationContainer /> */}
     </LeftSideContentWrapper>
   )
 
