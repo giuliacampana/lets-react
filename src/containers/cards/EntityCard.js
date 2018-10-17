@@ -39,17 +39,29 @@ const EntityCard = ({ entity, associations }) => (
               <TableRow>{p}</TableRow>
             ))
           }
-          <TitleContainer>
-            <Subheader>Upstream Associations</Subheader>
-          </TitleContainer>
+          {
+            associations[0].length
+              ? (
+                <TitleContainer>
+                  <Subheader>Upstream Associations</Subheader>
+                </TitleContainer>
+              )
+              : null
+          }
           {
             associations[0].map(a => (
               <ClickableTableRow>{a.entityType.type.name}</ClickableTableRow>
             ))
           }
-          <TitleContainer>
-            <Subheader>Downstream Associations</Subheader>
-          </TitleContainer>
+          {
+            associations[1].length
+              ? (
+                <TitleContainer>
+                  <Subheader>Downstream Associations</Subheader>
+                </TitleContainer>
+              )
+              : null
+          }
           {
             associations[1].map(a => (
               <ClickableTableRow>{a.entityType.type.name}</ClickableTableRow>

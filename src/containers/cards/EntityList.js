@@ -9,7 +9,7 @@ import { withRouter } from 'react-router';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
 import {
-  CardContainer, TitleContainer, ListTitle, TableOuterWrapper, TableInnerWrapper, InnerScrollContainer, TableRow, ClickableTableRow
+  CardContainer, TitleContainer, ListTitle, TableOuterWrapper, TableInnerWrapper, InnerScrollContainer, ClickableTableRow
 } from './Styles';
 
 
