@@ -128,7 +128,7 @@ class AppContainer extends Component<Props> {
           const entity = this.state.entities[i];
           for (let j = 0; j < entity.properties.length; j++) {
             let propName = this.state.properties[entity.properties[j]].type.name;
-            
+
             entity.properties.splice(j, 1, propName);
           }
         }
@@ -177,7 +177,11 @@ class AppContainer extends Component<Props> {
                   render={props => <EntityList {...props} entities={this.state.entities} />} />
               <Route
                   path="/entities/:entityId"
-                  render={({ match }) => <EntityCard entity={this.state.entities.find(entObj => entObj.id === match.params.entityId)} associations={this.findAssociations(match.params.entityId)} />} />
+                  render={({ match }) => (
+                    <EntityCard
+                        entity={this.state.entities.find(entObj => entObj.id === match.params.entityId)}
+                        associations={this.findAssociations(match.params.entityId)} />
+                  )} />
             </AppContentInnerWrapper>
           </AppContentOuterWrapper>
         </AppContainerWrapper>

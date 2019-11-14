@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Colors } from '../../../lattice-ui-kit/build/lattice-ui-kit';
+import { Colors } from 'lattice-ui-kit';
 
 const { NEUTRALS } = Colors;
 

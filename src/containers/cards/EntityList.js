@@ -1,28 +1,24 @@
-import React, { Component } from 'react';
-
+// @flow
+import React from 'react';
 import { Map } from 'immutable';
-import { AuthActionFactory } from 'lattice-auth';
-import { Colors } from '../../../lattice-ui-kit/build/lattice-ui-kit';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
-  CardContainer, TitleContainer, ListTitle, TableOuterWrapper, TableInnerWrapper, InnerScrollContainer, TableRow, ClickableTableRow
+  CardContainer,
+  ClickableTableRow,
+  ListTitle,
+  InnerScrollContainer,
+  TableInnerWrapper,
+  TableOuterWrapper,
+  TitleContainer,
 } from './Styles';
 
-
-const { logout } = AuthActionFactory;
-const { NEUTRALS } = Colors;
-
 type Props = {
-    actions :{
-      logout :() => void;
-    };
-  };
+};
 
-const EntityList = props => (
+const EntityList = (props :Props) => (
   <CardContainer>
     <TitleContainer>
       <ListTitle>Entities</ListTitle>
@@ -50,13 +46,6 @@ function mapStateToProps(state :Map<*, *>) :Object {
   };
 }
 
-function mapDispatchToProps(dispatch :Function) :Object {
-
-  return {
-    actions: bindActionCreators({ logout }, dispatch)
-  };
-}
-
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(EntityList)
+  connect(mapStateToProps)(EntityList)
 );

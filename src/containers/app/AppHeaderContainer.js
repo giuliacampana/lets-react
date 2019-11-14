@@ -6,14 +6,11 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 import { Map } from 'immutable';
-import { AuthActionFactory } from 'lattice-auth';
-import { Button, Colors } from '../../../lattice-ui-kit/';
+import { Button, Colors } from 'lattice-ui-kit';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import AppNavigationContainer from './AppNavigationContainer';
 import OpenLatticeLogo from '../../assets/images/OpenLatticeLogo.png';
 import * as Routes from '../../core/router/Routes';
 import {
@@ -22,7 +19,6 @@ import {
   APP_CONTENT_PADDING,
 } from '../../core/style/Sizes';
 
-const { logout } = AuthActionFactory;
 const { NEUTRALS } = Colors;
 
 // TODO: this should come from lattice-ui-kit, maybe after the next release. current version v0.1.1
@@ -123,10 +119,9 @@ class AppHeaderContainer extends Component<Props> {
 
   renderRightSideContent = () => {
 
-    const { actions } = this.props;
     return (
       <RightSideContentWrapper>
-        <LogoutButton onClick={actions.logout}>
+        <LogoutButton>
           Log Out
         </LogoutButton>
       </RightSideContentWrapper>
@@ -153,13 +148,6 @@ function mapStateToProps(state :Map<*, *>) :Object {
   };
 }
 
-function mapDispatchToProps(dispatch :Function) :Object {
-
-  return {
-    actions: bindActionCreators({ logout }, dispatch)
-  };
-}
-
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(AppHeaderContainer)
+  connect(mapStateToProps)(AppHeaderContainer)
 );

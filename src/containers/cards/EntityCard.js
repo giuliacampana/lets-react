@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
+// @flow
+import React from 'react';
 
-import styled from 'styled-components';
-import { Map, List } from 'immutable';
-import { AuthActionFactory } from 'lattice-auth';
-import { Colors } from '../../../lattice-ui-kit/build/lattice-ui-kit';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
-
 
 import {
-  CardContainer, TitleContainer, ListTitle, TableOuterWrapper, TableInnerWrapper, ScrollContainer, TableRow, ClickableTableRow, Subheader
+  CardContainer,
+  ClickableTableRow,
+  ListTitle,
+  ScrollContainer,
+  Subheader,
+  TableInnerWrapper,
+  TableOuterWrapper,
+  TableRow,
+  TitleContainer,
 } from './Styles';
-
-const { logout } = AuthActionFactory;
-const { NEUTRALS } = Colors;
 
 type Props = {
   actions :{
@@ -23,7 +23,7 @@ type Props = {
   };
 };
 
-const EntityCard = ({ entity, associations }) => (
+const EntityCard = ({ entity, associations } :Props) => (
   <CardContainer>
     <TitleContainer>
       <ListTitle>{entity.type.name}</ListTitle>
@@ -68,13 +68,6 @@ function mapStateToProps(state :Map<*, *>) :Object {
   };
 }
 
-function mapDispatchToProps(dispatch :Function) :Object {
-
-  return {
-    actions: bindActionCreators({ logout }, dispatch)
-  };
-}
-
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(EntityCard)
+  connect(mapStateToProps)(EntityCard)
 );
