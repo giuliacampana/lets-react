@@ -18,9 +18,8 @@ import {
 } from './Styles';
 
 type Props = {
-  actions :{
-    logout :() => void;
-  };
+  associations :[][];
+  entity :Object;
 };
 
 const EntityCard = ({ entity, associations } :Props) => (

@@ -16,9 +16,10 @@ import {
 } from './Styles';
 
 type Props = {
+  entities :Object[];
 };
 
-const EntityList = (props :Props) => (
+const EntityList = ({ entities } :Props) => (
   <CardContainer>
     <TitleContainer>
       <ListTitle>Entities</ListTitle>
@@ -27,7 +28,7 @@ const EntityList = (props :Props) => (
       <TableInnerWrapper>
         <InnerScrollContainer>
           {
-            props.entities.map(entity => (
+            entities.map((entity :Object) => (
               <Link to={`entities/${entity.id}`} style={{ textDecoration: 'none', color: '#8e929b' }}>
                 <ClickableTableRow key={entity.id}>{entity.type.name}</ClickableTableRow>
               </Link>

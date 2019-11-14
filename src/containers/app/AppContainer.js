@@ -61,7 +61,13 @@ type Props = {
   isLoadingApp :boolean;
 };
 
-class AppContainer extends Component<Props> {
+type State = {
+  associations :Object[];
+  entities :string[];
+  properties :Object;
+}
+
+class AppContainer extends Component<Props, State> {
   constructor(props) {
     super(props);
 
@@ -70,11 +76,6 @@ class AppContainer extends Component<Props> {
       properties: {},
       associations: []
     };
-
-    this.getEntityTypes = this.getEntityTypes.bind(this);
-    this.getPropertyTypes = this.getPropertyTypes.bind(this);
-    this.getAssociationTypes = this.getAssociationTypes.bind(this);
-    this.findAssociations = this.findAssociations.bind(this);
   }
 
   componentDidMount() {
@@ -85,20 +86,24 @@ class AppContainer extends Component<Props> {
     this.getEntityTypes();
   }
 
-  getEntityTypes() {
+  getEntityTypes = () => {
+    const { entities } = this.state;
     axios.get('https://api.openlattice.com/datastore/edm/entity/type')
       .then((response) => {
-        let ents = [];
+
+        let entitiesFound = [];
         for (let i = 0; i < response.data.length; i += 1) {
           if (response.data[i].category === 'EntityType') {
-            ents.push(response.data[i]);
+            entitiesFound.push(response.data[i]);
           }
         }
-        ents = ents.sort((a, b) => {
+
+        entitiesFound = entitiesFound.sort((a :Object, b :Object) => {
           return a.type.name.toLowerCase().localeCompare(b.type.name.toLowerCase());
         });
+
         this.setState({
-          entities: ents
+          entities: entities.concat(entitiesFound)
         });
       })
       .then(() => {
@@ -112,24 +117,27 @@ class AppContainer extends Component<Props> {
       });
   }
 
-  getPropertyTypes() {
+  getPropertyTypes = () => {
     axios.get('https://api.openlattice.com/datastore/edm/property/type')
       .then((response) => {
-        let props = {};
-        for (let i = 0; i < response.data.length; i++) {
-          props[response.data[i].id] = response.data[i];
+        const properties = {};
+        for (let i = 0; i < response.data.length; i += 1) {
+          properties[response.data[i].id] = response.data[i];
         }
         this.setState({
-          properties: props
+          properties
         });
       })
       .then(() => {
-        for (let i = 0; i < this.state.entities.length; i++) {
-          const entity = this.state.entities[i];
-          for (let j = 0; j < entity.properties.length; j++) {
-            let propName = this.state.properties[entity.properties[j]].type.name;
+        const { entities, properties } = this.state;
 
-            entity.properties.splice(j, 1, propName);
+        for (let i = 0; i < entities.length; i += 1) {
+          const entity :Object = entities[i];
+
+          for (let j = 0; j < entity.properties.length; j += 1) {
+            const propertyName = properties[entity.properties[j]].type.name;
+
+            entity.properties.splice(j, 1, propertyName);
           }
         }
       })
@@ -138,10 +146,9 @@ class AppContainer extends Component<Props> {
       });
   }
 
-  getAssociationTypes() {
+  getAssociationTypes = () => {
     axios.get('https://api.openlattice.com/datastore/edm/association/type')
       .then((response) => {
-        console.log(response.data);
         this.setState({
           associations: response.data
         });
@@ -151,21 +158,24 @@ class AppContainer extends Component<Props> {
       });
   }
 
-  findAssociations(entityId) {
-    console.log('this.state.associations inside func: ', this.state.associations);
-    let allAssociations = [[], []];
-    for (let i = 0; i < this.state.associations.length; i++) {
-      if (this.state.associations[i].src.includes(entityId)) {
-        allAssociations[0].push(this.state.associations[i]);
+  findAssociations = (entityId) => {
+    const { associations } = this.state;
+    const allAssociations = [[], []];
+
+    for (let i = 0; i < associations.length; i += 1) {
+      if (associations[i].src.includes(entityId)) {
+        allAssociations[0].push(associations[i]);
       }
-      if (this.state.associations[i].dst.includes(entityId)) {
-        allAssociations[1].push(this.state.associations[i]);
+
+      if (associations[i].dst.includes(entityId)) {
+        allAssociations[1].push(associations[i]);
       }
     }
     return allAssociations;
   }
 
   render() {
+    const { entities } = this.state;
     return (
       <Router>
         <AppContainerWrapper>
@@ -173,13 +183,13 @@ class AppContainer extends Component<Props> {
           <AppContentOuterWrapper>
             <AppContentInnerWrapper>
               <Route
-                  exact path="/"
-                  render={props => <EntityList {...props} entities={this.state.entities} />} />
+                  path="/"
+                  render={props => <EntityList {...props} entities={entities} />} />
               <Route
                   path="/entities/:entityId"
                   render={({ match }) => (
                     <EntityCard
-                        entity={this.state.entities.find(entObj => entObj.id === match.params.entityId)}
+                        entity={entities.find((entityObj :Object) => entityObj.id === match.params.entityId)}
                         associations={this.findAssociations(match.params.entityId)} />
                   )} />
             </AppContentInnerWrapper>
